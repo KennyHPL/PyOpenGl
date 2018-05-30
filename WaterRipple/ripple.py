@@ -3,7 +3,7 @@ import numpy as np
 import threading
 import time
 
-WIDTH = 100; HEIGHT = 100
+WIDTH = 200; HEIGHT = 200
 dampening = .99
 done = False
 
@@ -41,13 +41,10 @@ while not done:
             if key == pg.K_ESCAPE:
                 done = True
 
-    pressed = False
     if(pg.mouse.get_pressed()[0] == True):
         pos = pg.mouse.get_pos()
         buffer1[pos[0]][pos[1]] = 255
-        pressed = True
 
-    before = time.time()
     t1 = threading.Thread(target =calcBuffer,
                           args=(buffer2, buffer1, 1, WIDTH//2, 1, HEIGHT//2))
     t2 = threading.Thread(target =calcBuffer,
@@ -69,25 +66,6 @@ while not done:
                           args=(screen, buffer2, 0, WIDTH//2, HEIGHT//2, HEIGHT))
     t1.start();t2.start();t3.start();t4.start()
     t1.join();t2.join();t3.join();t4.join()
-
-    # for i in range(1, WIDTH-1):
-    #     for j in range(1, HEIGHT-1):
-    #         buffer2[i][j] = ((buffer1[i-1][j]+
-    #                          buffer1[i+1][j]+
-    #                          buffer1[i][j-1]+
-    #                          buffer1[i][j+1])/2 - buffer2[i][j]) * dampening
-    # for i in range(WIDTH):
-    #     for j in range(HEIGHT):
-    #         color = (buffer2[i][j])
-    #         if color > 255:
-    #             color = 255
-    #         elif color < 0:
-    #             color = 0
-    #         screen.set_at((i,j), (color,color,color))
-
-    after = time.time()
-    print(after-before)
-
 
     temp = buffer2
     buffer2 = buffer1
